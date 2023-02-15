@@ -65,7 +65,6 @@ class MoviesView(Resource):
 @movie_ns.route('/<int:uid>')
 class MovieView(Resource):
     def get(self, uid):
-        movie = Movie.query.get(uid)
         director_id = request.args.get('director_id')
         if director_id:
             if Movie.query.join(Director, Director.id == Movie.director_id).filter(Director.id == director_id):
@@ -73,6 +72,7 @@ class MovieView(Resource):
                 return movies_schema.dump(movies), 200
             else:
                 return "Error", 404
+        movie = Movie.query.get(uid)
         return movie_schema.dump(movie)
 
 
